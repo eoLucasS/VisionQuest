@@ -1,87 +1,130 @@
-import random  # Importa a biblioteca random para gerar valores aleatórios
-import math  # Importa a biblioteca math para funções matemáticas
+import random  # Para gerar numeros aleatorios
 
 def generate_question(difficulty):
-    question_data = {}  # Dicionário para armazenar os dados da questão
+    question_types = ['multiple_choice', 'cartesian_plane']
+    question_type = random.choice(question_types)
+
     if difficulty == 'Facil':
-        question_types = ['arithmetic', 'cartesian_plane']  # Tipos de questões para o nível fácil
+        if question_type == 'multiple_choice':
+            # Questoes faceis de adicao ou subtracao
+            num1 = random.randint(1, 20)
+            num2 = random.randint(1, 20)
+            operation = random.choice(['+', '-'])
+            if operation == '+':
+                question_text = f"Quanto e {num1} + {num2}?"
+                correct_answer = str(num1 + num2)
+                hint = 'Para somar, junte as quantidades dos dois numeros.'
+            else:
+                question_text = f"Quanto e {num1} - {num2}?"
+                correct_answer = str(num1 - num2)
+                hint = 'Para subtrair, tire o segundo numero do primeiro.'
+            options = [correct_answer,
+                       str(int(correct_answer) + random.randint(1, 5)),
+                       str(int(correct_answer) - random.randint(1, 5))]
+            random.shuffle(options)
+            question_data = {
+                'type': 'multiple_choice',
+                'question': question_text,
+                'options': options,
+                'correct_answer': correct_answer,
+                'hint': hint
+            }
+        else:
+            # Questoes faceis do plano cartesiano
+            x_target = random.randint(-5, 5)
+            y_target = random.randint(-5, 5)
+            question_text = f"Toque no ponto ({x_target}, {y_target})."
+            hint = 'Lembre-se: o primeiro numero e X (horizontal) e o segundo e Y (vertical).'
+            question_data = {
+                'type': 'cartesian_plane',
+                'question': question_text,
+                'target_point': (x_target, y_target),
+                'hint': hint
+            }
     elif difficulty == 'Medio':
-        question_types = ['arithmetic', 'sqrt', 'power', 'cartesian_plane']  # Tipos para o nível médio
+        if question_type == 'multiple_choice':
+            # Questoes medias de multiplicacao ou divisao
+            num1 = random.randint(2, 10)
+            num2 = random.randint(2, 10)
+            operation = random.choice(['*', '/'])
+            if operation == '*':
+                question_text = f"Quanto e {num1} x {num2}?"
+                correct_answer = str(num1 * num2)
+                hint = 'Multiplicacao e como somar o primeiro numero varias vezes.'
+            else:
+                num1 = num1 * num2
+                question_text = f"Quanto e {num1} / {num2}?"
+                correct_answer = str(num1 // num2)
+                hint = 'Divisao e quantas vezes o divisor cabe no dividendo.'
+            options = [correct_answer,
+                       str(int(correct_answer) + random.randint(1, 5)),
+                       str(max(0, int(correct_answer) - random.randint(1, 5)))]
+            random.shuffle(options)
+            question_data = {
+                'type': 'multiple_choice',
+                'question': question_text,
+                'options': options,
+                'correct_answer': correct_answer,
+                'hint': hint
+            }
+        else:
+            # Questoes medias do plano cartesiano
+            x_target = random.randint(-8, 8)
+            y_target = random.randint(-5, 5)
+            question_text = f"Toque no ponto ({x_target}, {y_target})."
+            hint = 'Lembre-se: o primeiro numero e X (horizontal) e o segundo e Y (vertical).'
+            question_data = {
+                'type': 'cartesian_plane',
+                'question': question_text,
+                'target_point': (x_target, y_target),
+                'hint': hint
+            }
     elif difficulty == 'Dificil':
-        question_types = ['arithmetic', 'sqrt', 'power', 'log', 'linear_equation', 'cartesian_plane']  # Tipos para o nível difícil
-    question_type = random.choice(question_types)  # Seleciona aleatoriamente um tipo de questão
-    if question_type == 'cartesian_plane':
-        x = random.randint(-18, 18)  # Gera uma coordenada x aleatória
-        y = random.randint(-10, 10)  # Gera uma coordenada y aleatória
-        question = f"Encontre o ponto: ({x}, {y})"  # Monta a pergunta
-        question_data['type'] = 'cartesian_plane'  # Define o tipo de questão
-        question_data['question'] = question  # Armazena a pergunta
-        question_data['target_point'] = (x, y)  # Armazena o ponto alvo
+        if question_type == 'multiple_choice':
+            # Questoes dificeis de logaritmo ou raiz quadrada
+            question_subtype = random.choice(['log', 'raiz'])
+            if question_subtype == 'log':
+                base = random.randint(2, 5)
+                exponent = random.randint(2, 4)
+                result = base ** exponent
+                question_text = f"Qual e o logaritmo base {base} de {result}?"
+                correct_answer = str(exponent)
+                hint = 'Lembre-se: log base b de b^x e igual a x.'
+            else:
+                num = random.choice([4, 9, 16, 25, 36, 49, 64, 81, 100])
+                question_text = f"Qual e a raiz quadrada de {num}?"
+                correct_answer = str(int(num ** 0.5))
+                hint = 'Procure um numero que multiplicado por si mesmo resulta no numero dado.'
+            options = [correct_answer,
+                       str(int(correct_answer) + random.randint(1, 3)),
+                       str(max(1, int(correct_answer) - random.randint(1, 3)))]
+            random.shuffle(options)
+            question_data = {
+                'type': 'multiple_choice',
+                'question': question_text,
+                'options': options,
+                'correct_answer': correct_answer,
+                'hint': hint
+            }
+        else:
+            # Questoes dificeis do plano cartesiano
+            x_target = random.randint(-10, 10)
+            y_target = random.randint(-7, 7)
+            question_text = f"Toque no ponto ({x_target}, {y_target})."
+            hint = 'Lembre-se: o primeiro numero e X (horizontal) e o segundo e Y (vertical).'
+            question_data = {
+                'type': 'cartesian_plane',
+                'question': question_text,
+                'target_point': (x_target, y_target),
+                'hint': hint
+            }
     else:
-        question_data['type'] = 'multiple_choice'  # Define o tipo como múltipla escolha
-        if question_type == 'arithmetic':
-            operations = ['+', '-', '*', '/']  # Operações aritméticas possíveis
-            op = random.choice(operations)  # Seleciona uma operação aleatória
-            num1 = random.randint(1, 100)  # Gera o primeiro número
-            num2 = random.randint(1, 100)  # Gera o segundo número
-            if op == '/':
-                num2 = random.randint(1, 10)  # Ajusta num2 para evitar divisões complexas
-                num1 = num2 * random.randint(1, 10)  # Ajusta num1 para garantir uma divisão exata
-            question = f"Quanto e {num1} {op} {num2}?"  # Monta a pergunta
-            correct_answer = int(eval(f"{num1}{op}{num2}"))  # Calcula a resposta correta
-        elif question_type == 'sqrt':
-            num = random.choice([i**2 for i in range(1, 31)])  # Seleciona um quadrado perfeito
-            question = f"Quanto e sqrt({num})?"  # Monta a pergunta
-            correct_answer = int(math.sqrt(num))  # Calcula a raiz quadrada
-        elif question_type == 'power':
-            base = random.randint(2, 10)  # Gera a base da potência
-            exponent = random.randint(2, 5)  # Gera o expoente
-            question = f"Quanto e {base}^{exponent}?"  # Monta a pergunta
-            correct_answer = base ** exponent  # Calcula a potência
-        elif question_type == 'log':
-            base = random.choice([2, 3, 5, 10])  # Seleciona a base do logaritmo
-            exponent = random.randint(1, 5)  # Gera o expoente
-            num = base ** exponent  # Calcula o logaritmando
-            question = f"Quanto e log_{base}({num})?"  # Monta a pergunta
-            correct_answer = exponent  # A resposta é o expoente
-        elif question_type == 'linear_equation':
-            equation_type = random.choice(['addition', 'subtraction', 'multiplication', 'division'])  # Tipo de equação
-            if equation_type == 'addition':
-                x = random.randint(1, 50)  # Valor de x
-                b = random.randint(1, 50)  # Valor de b
-                c = x + b  # Calcula c
-                question = f"x + {b} = {c}, Quanto e x?"  # Monta a equação
-                correct_answer = x  # Resposta correta
-            elif equation_type == 'subtraction':
-                x = random.randint(1, 50)
-                b = random.randint(1, 50)
-                c = x - b
-                question = f"x - {b} = {c}, Quanto e x?"
-                correct_answer = x
-            elif equation_type == 'multiplication':
-                x = random.randint(1, 20)
-                b = random.randint(1, 10)
-                c = x * b
-                question = f"{b} * x = {c}, Quanto e x?"
-                correct_answer = x
-            elif equation_type == 'division':
-                b = random.randint(1, 10)
-                x = random.randint(1, 50)
-                c = x / b
-                if c.is_integer():
-                    c = int(c)
-                    question = f"x / {b} = {c}, Quanto e x?"
-                    correct_answer = x
-                else:
-                    return generate_question(difficulty)  # Regera a questão se o resultado não for inteiro
-        wrong_answers = set()  # Conjunto para armazenar respostas incorretas
-        while len(wrong_answers) < 2:
-            wrong = correct_answer + random.choice([-random.randint(1, 10), random.randint(1, 10)])  # Gera uma resposta errada
-            if wrong != correct_answer and wrong >= 0:
-                wrong_answers.add(wrong)  # Adiciona se for válida
-        options = [str(correct_answer)] + [str(w) for w in wrong_answers]  # Combina as respostas
-        random.shuffle(options)  # Embaralha as opções
-        question_data['question'] = question  # Armazena a pergunta
-        question_data['correct_answer'] = str(correct_answer)  # Armazena a resposta correta
-        question_data['options'] = options  # Armazena as opções de resposta
-    return question_data  # Retorna os dados da questão
+        # Pergunta padrao
+        question_data = {
+            'type': 'multiple_choice',
+            'question': 'Pergunta padrao',
+            'options': ['Opcao 1', 'Opcao 2', 'Opcao 3'],
+            'correct_answer': 'Opcao 1',
+            'hint': 'Esta e uma dica padrao.'
+        }
+    return question_data
